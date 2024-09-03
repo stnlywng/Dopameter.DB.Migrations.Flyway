@@ -6,9 +6,7 @@ CREATE PROCEDURE EditGremlin(
     IN inputName VARCHAR(50),
     IN inputActivityName VARCHAR(100),
     IN inputKindOfGremlin SMALLINT,
-    IN inputIntensity INT,
-    IN inputDateOfBirth DATETIME,
-    IN inputLastFedDate DATETIME
+    IN inputIntensity INT
 )
 BEGIN
     UPDATE Gremlins
@@ -16,9 +14,7 @@ BEGIN
         name = inputName,
         activityName = inputActivityName,
         kindOfGremlin = inputKindOfGremlin,
-        intensity = inputIntensity,
-        dateOfBirth = inputDateOfBirth,
-        lastFedDate = inputLastFedDate
+        intensity = inputIntensity
     WHERE gremlinID = inputGremlinID;
     
     SELECT * FROM Gremlins WHERE gremlinID = inputGremlinID;
@@ -27,7 +23,6 @@ END;
 -- Stored Procedure to add a new gremlin
 CREATE PROCEDURE AddNewGremlin(
     IN inputUserID INT,
-    IN inputGremlinID INT,
     IN inputName VARCHAR(50),
     IN inputActivityName VARCHAR(100),
     IN inputKindOfGremlin SMALLINT,

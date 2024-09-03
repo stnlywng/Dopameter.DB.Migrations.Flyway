@@ -30,6 +30,7 @@ DELIMITER ;
 
 -- Stored Procedure to Create a New User
 DELIMITER $$
+
 CREATE PROCEDURE CreateUser(
     IN inputEmail VARCHAR(255),
     IN inputUsername VARCHAR(100),
@@ -37,6 +38,7 @@ CREATE PROCEDURE CreateUser(
 )
 BEGIN
     DECLARE userExists INT;
+    DECLARE newUserID INT;
 
     -- Check if a user with the same email or username already exists
     SELECT COUNT(*) INTO userExists
@@ -50,14 +52,23 @@ BEGIN
         INSERT INTO Users (email, username, password)
         VALUES (inputEmail, inputUsername, inputPassword);
 
-        -- Return the userID of the newly created user
-        SELECT LAST_INSERT_ID() AS userID;
+        -- Get the userID of the newly created user
+        SET newUserID = LAST_INSERT_ID();
+
+        -- Return the newly created user's details
+        SELECT 
+            newUserID AS userID,
+            inputEmail AS email,
+            inputUsername AS username;
     END IF;
 END $$
+
+-- Reset the delimiter
 DELIMITER ;
 
 -- Stored Procedure to Update a User's Email, Username, and Password
 DELIMITER $$
+
 CREATE PROCEDURE UpdateUser(
     IN inputUserID INT,
     IN newEmail VARCHAR(255),
@@ -79,6 +90,14 @@ BEGIN
         -- Update user details
         UPDATE Users
         SET email = newEmail, username = newUsername, password = newPassword
+        WHERE userID = inputUserID;
+
+        -- Return the updated user's details
+        SELECT 
+            userID AS userID,
+            email AS email,
+            username AS username
+        FROM Users
         WHERE userID = inputUserID;
     END IF;
 END $$
